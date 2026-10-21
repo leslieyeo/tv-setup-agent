@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "tv-setup-agent",
+  "version": "0.1.0-preview.1",
+  "description": "Local Agent Skills and guarded tools for Android TV setup, firmware adapters, ASUS routing and YouTube playback verification.",
+  "license": "MIT",
+  "homepage": "https://github.com/leslieyeo/tv-setup-agent",
+  "repository": "https://github.com/leslieyeo/tv-setup-agent"
+}
