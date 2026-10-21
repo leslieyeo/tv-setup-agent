@@ -1,0 +1,20 @@
+[
+  {
+    "id": "tcl-tc8000-ay30a2-a11-2026030620",
+    "match": {
+      "ro.build.fingerprint": "TCL/tc8000_ay30a2/tc8000_ay30a2:11/RQ3A.210705.001/2026030620:user/release-keys",
+      "ro.build.version.sdk": "30"
+    },
+    "market_models": [
+      "FF75F295C-FA65"
+    ],
+    "method": "tcl-install-config-transaction",
+    "evidence": {
+      "original_lab_home_and_reboot": true,
+      "original_lab_youtube_picture_and_sound": true,
+      "portable_installer_retested_on_fresh_hardware": false,
+      "original_lab_install_and_exact_policy_restore": true
+    },
+    "scope": "exact fingerprint only; does not establish support for all TCL or Falcon televisions"
+  }
+]

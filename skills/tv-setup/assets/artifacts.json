@@ -1,0 +1,51 @@
+{
+  "launcher-tcl": {
+    "bundled": "assets/cleanyourtv-tcl-android11.apk",
+    "package": "com.gathin.tvhome",
+    "min_sdk": 26,
+    "source_repo": "https://github.com/Gathin23/cleanyourtv",
+    "source_commit": "f2a336a62965832daad607fa288e1d8f1de528d4",
+    "source_patch": "assets/oem/cleanyourtv-tcl.patch",
+    "build": "locally adapted TCL build, not an upstream release",
+    "sha256": "9144fdcc4120bb18898a79cdf92157c9413ed1f048057e58ca6cf72cb7c7492a",
+    "max_bytes": 375317
+  },
+  "oem-policy": {
+    "bundled": "assets/oem-policy.jar",
+    "source": "assets/oem/TvInstallConfigTool.java",
+    "sha256": "94a5be89d672429f05d62562eb6a46320008f93814879b81d146a57cdd620fe7",
+    "max_bytes": 2854
+  },
+  "smarttube-fdroid": {
+    "url": "https://f-droid.org/repo/app.smarttube.fdroid_2446.apk",
+    "filename": "SmartTube-fdroid-32.56.apk",
+    "package": "app.smarttube.fdroid",
+    "min_sdk": 21,
+    "sha256": "04884ce41c43671120fbaa81bc8953dfb617380dc038f12aca649a3d5b446a33",
+    "max_bytes": 54000000,
+    "signer_sha256": "33791872daccf601a31bd73d329245f80f69044f76e1a794586fb857f09deaa8",
+    "source_commit": "9336539b3db340c7bcf55f95afad44d1d1abb7e4",
+    "note": "independent F-Droid build; no claim of perpetual playback compatibility"
+  },
+  "mihomo-armv5": {
+    "url": "https://github.com/MetaCubeX/mihomo/releases/download/v1.19.32/mihomo-linux-armv5-v1.19.32.gz",
+    "filename": "mihomo-armv5-v1.19.32.gz",
+    "sha256": "f0e90b3cdd957c8e8bd6e5ff515d7bf310452734af15c90fdda4f6fc212689a0",
+    "max_bytes": 23000000,
+    "note": "runtime-tested on the exact 2.6.36.4brcmarm laboratory router; architecture alone is not sufficient"
+  },
+  "cn-domains": {
+    "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/ca85be6b1ebf086ec2f6d6885e8b4eba959bede1/geo/geosite/cn.mrs",
+    "filename": "cn-domains.mrs",
+    "sha256": "21209c8ff73de954207e10fd817089986b5dad5606836924f88cffdfde9a8a0a",
+    "max_bytes": 1000000,
+    "source_commit": "ca85be6b1ebf086ec2f6d6885e8b4eba959bede1"
+  },
+  "cn-ip": {
+    "url": "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/ca85be6b1ebf086ec2f6d6885e8b4eba959bede1/geo/geoip/cn.mrs",
+    "filename": "cn-ip.mrs",
+    "sha256": "024ca0b05ffc31a4b8a6df25f248a944a109e49043c174ad7d52476a4790f341",
+    "max_bytes": 1000000,
+    "source_commit": "ca85be6b1ebf086ec2f6d6885e8b4eba959bede1"
+  }
+}

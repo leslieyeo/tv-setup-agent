@@ -1,0 +1,150 @@
+diff --git a/launcher/app/src/main/AndroidManifest.xml b/launcher/app/src/main/AndroidManifest.xml
+index fbf0f9e..dfbb51b 100644
+--- a/launcher/app/src/main/AndroidManifest.xml
++++ b/launcher/app/src/main/AndroidManifest.xml
+@@ -32,6 +32,8 @@
+         </intent>
+         <!-- China-market MIUI TV firmware: the Settings and Wi-Fi pills fall back to Xiaomi's settings app. -->
+         <package android:name="com.xiaomi.mitv.settings" />
++        <package android:name="com.tcl.settings" />
++        <package android:name="com.tcl.tv" />
+     </queries>
+ 
+     <application
+diff --git a/launcher/app/src/main/java/com/gathin/tvhome/MainActivity.java b/launcher/app/src/main/java/com/gathin/tvhome/MainActivity.java
+index 5ea1f3c..f5e6484 100644
+--- a/launcher/app/src/main/java/com/gathin/tvhome/MainActivity.java
++++ b/launcher/app/src/main/java/com/gathin/tvhome/MainActivity.java
+@@ -424,10 +424,14 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
+         btnInputs.setOnClickListener(v -> showInputs());
+         btnWifi.setOnClickListener(v -> openNetworkPill());
+         btnWifi.setOnLongClickListener(v -> {
+-            open(systemIntent(Settings.ACTION_WIFI_SETTINGS));
++            if (!openTclPanel("Settings", "network")) {
++                open(systemIntent(Settings.ACTION_WIFI_SETTINGS));
++            }
+             return true;
+         });
+-        btnSettings.setOnClickListener(v -> open(systemIntent(Settings.ACTION_SETTINGS)));
++        btnSettings.setOnClickListener(v -> {
++            if (!openTclPanel("Settings", "")) open(systemIntent(Settings.ACTION_SETTINGS));
++        });
+         btnReorder = findViewById(R.id.btnReorder);
+         btnReorder.setOnClickListener(v -> toggleReorder());
+         btnReorder.setVisibility(cfg.reorderButton ? View.VISIBLE : View.GONE);
+@@ -1616,7 +1620,23 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
+     private void openNetworkPill() {
+         Intent i = vpnApp.isEmpty() ? null : getPackageManager().getLeanbackLaunchIntentForPackage(vpnApp);
+         if (i == null && !vpnApp.isEmpty()) i = getPackageManager().getLaunchIntentForPackage(vpnApp);
+-        open(i != null ? i : systemIntent(Settings.ACTION_WIFI_SETTINGS));
++        if (i != null) open(i);
++        else if (!openTclPanel("Settings", "network")) open(systemIntent(Settings.ACTION_WIFI_SETTINGS));
++    }
++
++    /** Native panels exported by this TCL China firmware's settings service. */
++    private boolean openTclPanel(String type, String item) {
++        if (!"TCL".equalsIgnoreCase(Build.BRAND)) return false;
++        Intent panel = new Intent("com.tcl.settings.SHOW_WINDOW")
++                .setComponent(new ComponentName("com.tcl.settings", "com.tcl.settings.ShowWindowService"))
++                .putExtra("Type", type);
++        if (!item.isEmpty()) panel.putExtra("ITEM", item);
++        try {
++            return startService(panel) != null;
++        } catch (RuntimeException e) {
++            android.util.Log.w("TvHome", "TCL native panel unavailable", e);
++            return false;
++        }
+     }
+ 
+ 
+@@ -1631,6 +1651,15 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
+         i = new Intent().setComponent(new ComponentName(
+                 "com.xiaomi.mitv.settings", "com.xiaomi.mitv.settings.entry.MainActivity"));
+         if (i.resolveActivity(getPackageManager()) != null) return i;
++        // This TCL China firmware has a settings app, but no ACTION_SETTINGS handler.
++        if ("TCL".equalsIgnoreCase(Build.BRAND)) {
++            String action = Settings.ACTION_SETTINGS.equals(standardAction)
++                    ? Intent.ACTION_MAIN : standardAction;
++            return new Intent(action).setComponent(new ComponentName(
++                    "com.tcl.settings", "com.tcl.settings.ui.MainActivity"));
++        }
++        i = getPackageManager().getLaunchIntentForPackage("com.tcl.settings");
++        if (i != null) return i;
+         return new Intent(standardAction);   // nothing found: let open() show the can't-open toast
+     }
+ 
+@@ -1701,6 +1730,7 @@ public class MainActivity extends Activity implements AppAdapter.TileListener {
+ 
+     /** Dropdown menu under the Inputs pill: HDMI ports (with connection state), AV and Live TV. */
+     private void showInputs() {
++        if (openTclPanel("Source", "")) return;
+         View anchor = findViewById(R.id.btnInputs);
+         View panel = getLayoutInflater().inflate(R.layout.popup_inputs, root, false);
+         LinearLayout rows = panel.findViewById(R.id.rows);
+diff --git a/launcher/app/src/main/res/values-zh-rCN/strings.xml b/launcher/app/src/main/res/values-zh-rCN/strings.xml
+index e8185c7..34bf2e8 100644
+--- a/launcher/app/src/main/res/values-zh-rCN/strings.xml
++++ b/launcher/app/src/main/res/values-zh-rCN/strings.xml
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-    <string name="app_name">主屏幕</string>
++    <string name="app_name">CleanYourTV</string>
+     <string name="inputs">输入源</string>
+     <string name="wifi">无线网络</string>
+     <string name="settings">设置</string>
+diff --git a/launcher/app/src/main/res/values/config.xml b/launcher/app/src/main/res/values/config.xml
+index 6710092..cc4bb42 100644
+--- a/launcher/app/src/main/res/values/config.xml
++++ b/launcher/app/src/main/res/values/config.xml
+@@ -9,10 +9,10 @@
+ 
+     <!-- Apps pinned to the dock row at the bottom, in this order. Missing apps are skipped. -->
+     <string-array name="dock_apps">
+-        <item>com.netflix.ninja</item>
+-        <item>com.amazon.amazonvideo.livingroom</item>
+-        <item>com.google.android.youtube.tv</item>
+-        <item>in.startv.hotstar</item>
++        <item>com.xiaodianshi.tv.yst</item>
++        <item>com.quark.yun.tv</item>
++        <item>com.tcl.ui_mediaCenter</item>
++        <item>com.tcl.appmarket2</item>
+     </string-array>
+     <!-- With fewer dock_apps than columns (or a dock app that is not installed), the free dock slots take
+          the first grid apps, so the dock never shows a gap. false leaves them empty (#162); a theme can
+@@ -26,12 +26,12 @@
+     </string-array>
+ 
+     <!-- The TV's Live TV / tuner app, offered at the end of the Inputs menu. Leave empty to omit. -->
+-    <string name="live_tv_package" translatable="false">com.mediatek.wwtv.tvcenter</string>
++    <string name="live_tv_package" translatable="false">com.tcl.tv</string>
+ 
+     <!-- Some TVs give their Live TV app no leanback entry point at all, so `live_tv_package` above
+          resolves to nothing (TCL Android TV 9 on China-market sets is one). This action is then sent
+          to that package instead, and the app starts normally. Leave empty to omit. -->
+-    <string name="live_tv_action" translatable="false"></string>
++    <string name="live_tv_action" translatable="false">android.intent.action.TV</string>
+ 
+     <!-- TVs with no TvInputManager have no HDMI list to read, but their own source-selection panel
+          still switches inputs (TCL Android TV 9 again). When nothing could be listed, the Inputs menu
+@@ -97,7 +97,7 @@
+     <bool name="show_home_settings_shortcut">false</bool>
+ 
+     <!-- Installed launchable apps, including ordinary Android apps. Also settable in config.json. -->
+-    <bool name="app_library">false</bool>
++    <bool name="app_library">true</bool>
+ 
+     <!-- Module cards: an app that declares a card (docs/specs/card.md) can stand in for its tile with its own
+          label, caption and glow colour, once you answer Show on the prompt. false: never look for cards or ask. -->
+diff --git a/launcher/app/src/main/res/values/strings.xml b/launcher/app/src/main/res/values/strings.xml
+index 50144ba..8d2cfc9 100644
+--- a/launcher/app/src/main/res/values/strings.xml
++++ b/launcher/app/src/main/res/values/strings.xml
+@@ -1,6 +1,6 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+-    <string name="app_name">Home</string>
++    <string name="app_name">CleanYourTV</string>
+     <string name="inputs">Inputs</string>
+     <string name="wifi">Wi-Fi</string>
+     <string name="settings">Settings</string>
