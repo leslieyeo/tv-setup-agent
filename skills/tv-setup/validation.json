@@ -1,0 +1,47 @@
+{
+  "checked_at": "2026-10-21T13:38:39.522243+00:00",
+  "version": "0.1.0-preview.1",
+  "software_tests": {
+    "unittest_passed": 26,
+    "failed": 0,
+    "skill_frontmatter_valid": true,
+    "self_contained_skill_copy_test": true,
+    "project_install_idempotence": true,
+    "existing_skill_collision_preserved": true,
+    "generated_shell_syntax_checked": true,
+    "local_modification_preserved_on_reinstall": true
+  },
+  "runtime_checks": {
+    "fixed_commit_rule_download_hashes_match": true,
+    "mihomo_v1_19_32_native_config_test": true,
+    "linux_arm_runtime_retested_by_this_package": false
+  },
+  "hardware_evidence": {
+    "original_tv_lab_install_home_and_picture_sound": true,
+    "original_asus_lab_wired_wireless_reboot_dns_ntp": true,
+    "fresh_hardware_install_of_portable_package": false,
+    "current_tv_readonly_connection": "unavailable; no device mutation performed",
+    "cross_brand_coverage_proven": false
+  },
+  "agent_host_checks": {
+    "codex_project_skill_link_created_in_isolated_test": true,
+    "claude_project_skill_link_created_in_isolated_test": true,
+    "model_automatic_skill_discovery_tested": false,
+    "generic_local_cli_entry_tested": true
+  },
+  "boundaries": [
+    "Router CLI renders private stages; deployment remains Agent-controlled, not an unattended one-command router installer.",
+    "Unknown firmware is research-only until code and hardware evidence are reviewed.",
+    "Provider file import is implemented; subscription auto-refresh is not bundled.",
+    "No cloud plugin, unattended router deployment, or new cross-brand hardware validation is included."
+  ],
+  "publication_preparation": {
+    "repository_url": "https://github.com/leslieyeo/tv-setup-agent",
+    "visibility": "public",
+    "skills_cli": "1.7.4",
+    "standard_project_install_from_local_source_tested": true,
+    "codex_and_claude_share_one_source": true,
+    "fresh_hardware_retest": false,
+    "checked_at": "2026-10-21T14:11:26.384588+00:00"
+  }
+}
