@@ -1,0 +1,22 @@
+[
+  {
+    "id": "asus-rt-ac68u-merlin-386-14-2",
+    "match": {
+      "productid": "RT-AC68U",
+      "buildno": "386",
+      "extendno": "14_2",
+      "kernel": "2.6.36.4brcmarm",
+      "arch": "armv7l"
+    },
+    "candidate_core": "mihomo-armv5",
+    "radio_uplink_iface": "eth2",
+    "lan_iface": "br0",
+    "evidence": {
+      "original_lab_wired": true,
+      "original_lab_wireless_5g_to_2g": true,
+      "original_lab_reboot_ntp_dns": true,
+      "portable_renderer_fresh_hardware_retest": false
+    },
+    "scope": "source method verified on one laboratory router; generated portable bundles remain preview"
+  }
+]
