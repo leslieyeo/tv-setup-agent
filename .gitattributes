@@ -1,0 +1,10 @@
+*.md text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+*.json text eol=lf
+*.yml text eol=lf
+*.apk binary
+*.jar binary
+# Preserve upstream license text and unified-diff context lines verbatim.
+skills/tv-setup/assets/licenses/*.txt -whitespace
+skills/tv-setup/assets/oem/*.patch -whitespace
